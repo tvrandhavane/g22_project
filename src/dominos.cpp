@@ -47,8 +47,9 @@ namespace cs296
     float x = -40.0f;
     float y = 52.5f;
 
-    //!<B>1. L Shaped Rod</B>
-     /*! L shaped rod consists of two rods or bars which are of b2 Body to which the pointer variable are "horBar" 
+     //!<B>1. L Shaped Rod</B>
+     /*! 
+     L shaped rod consists of two rods or bars which are of b2 Body to which the pointer variable are "horBar" 
      & "verBar".
      A variable "shape" is used to set the fixtures to both the rods.
      Each of the rod is 5 units in length and 0.5 units in width , horizontal and vertical bars are initially placed 
@@ -57,6 +58,7 @@ namespace cs296
      Revolutionary joints consisiting of three anchors are set up also three anchors are set up which joins up the three 
      bars at different joints, Also a constraint is also made between horizontal and vertical rod .
      */
+    
     {
       
       b2Body* horBar;
@@ -121,12 +123,14 @@ namespace cs296
     //Ground
 
     //!<B>2. Ground </B>
-    /*! Ground is represented by a variable of type b2Body to which the pointer variable "b1" points.
+    /*! 
+    Ground is represented by a variable of type b2Body to which the pointer variable "b1" points.
     A variable "shape" of type b2EdgeShape is used to set the fixtures to ground.
     The ground is a line segment starting at vertex (-95,-15) and ending at vertex (95,-15). (Vertices are variables 
     of type b2Vec2.)Variable "bd" of type b2BodyDef is used to pass the ground object to the 
     world object to create the ground body.
     */
+    
     b2Body* b1;
     {
       b2EdgeShape shape;
@@ -138,6 +142,7 @@ namespace cs296
     }
     
     //The horizontal shelf holding the dominos
+    
     //!<B>3. Horizontal shelf holding dominos</B>
     /*!
     There is a horizontal shelf, on which the dominos are kept.
@@ -189,10 +194,10 @@ namespace cs296
     	  body->CreateFixture(&fd);
     	}
 	
-  //Sphereball that the dominos kicks off
+    //Sphereball that the dominos kicks off
 
-  //!<B>5. First Sphere ball</B>
-  /*!
+    //!<B>5. First Sphere ball</B>
+    /*! 
     A ball is created with radius 1 unit with a pointer to b2Body as "spherebody" and the fixtures are given to the ball 
     through ballfd with density as 200 the ball is set up as a dynamic body ans is initially placed at (2.5,40).
     Variable "ballbd" of type b2BodyDef is used to pass the ball object to the world object to create the spherical ball.
@@ -235,6 +240,7 @@ namespace cs296
     during the course of its motion. Pendulum is initially at a extreme position and is withheld there with the help of a 
     vertical bar which has a coefficient of friction to hold the pendulum at rest.
     */
+    
     x = -17.0f;
     y = 28.0f;
     {
@@ -276,8 +282,10 @@ namespace cs296
     }
 
     //Horizontal platform below pendulum
-    /*!<B>7. Horizontal platform</B>
-    /*!This sets up a horizontal platform below the pendulum on which is kept a vertical bar meant for keeping the
+    
+    //!<B>7. Horizontal platform</B>
+    /*!
+    This sets up a horizontal platform below the pendulum on which is kept a vertical bar meant for keeping the
     pendulum at rest initially the platform runs between the coordinates (-32,12) , (-7,12).The length of this platform
     is 25.
     */
@@ -293,8 +301,10 @@ namespace cs296
     }
 
     //Vertical line between wedge and horizontal platform.
+    
     //!<B>8. Vertical line between wedge and horizontal platform.</B>
-    /*!This sets up a vertical line between triangular wedge and horizontal platform whose purpose is to prevent 
+    /*!
+    This sets up a vertical line between triangular wedge and horizontal platform whose purpose is to prevent 
     the vertical bar to fall on the ground i.e. it restricts the motion of the vertical bar the vertical bar is of length
     11 and runs between coordinates(-32,12) , (-32,23).Object bd b2BodyDef is passed to the world object to create this.
     */
@@ -310,7 +320,8 @@ namespace cs296
 
     //Vertical bar 
     //!<B>9. Vertical Bar to hold pendulum at rest</B>
-    /*Here we create a vertical bar that is meant for holding the pendulum initially at rest at its extreme position.
+    /*!
+    Here we create a vertical bar that is meant for holding the pendulum initially at rest at its extreme position.
     It is a box of height 7 and width 0.5 and is a dynamic body with object fd settting its fixtures like density to 0.1 
     coefficient of friction as 0.1 and is initially placed at (-11,17).
     */
@@ -336,14 +347,15 @@ namespace cs296
     }
 
 
-//Triangular wedge
-  //!<B>9. Triangular wedge</B>
-  /* Here we set up a triangular wedge by making up three edges one vertical , one horizontal and one diagonal joining
-  the both.Horizontal edge is of length 22 and lies between (-40,23) , (-18,23) the vertical edge lies between (-40,23) ,
-  (-40,27) and is of length 4 units and the third edge joining both lies between (-40,27) , (-34,23) all three edges 
-  are made up by passing bd object to the world.
-  */
-
+	 //Triangular wedge
+	
+	 //!<B>10. Triangular wedge</B>
+	 /*! 
+	 Here we set up a triangular wedge by making up three edges one vertical , one horizontal and one diagonal joining
+	 the both.Horizontal edge is of length 22 and lies between (-40,23) , (-18,23) the vertical edge lies between (-40,23) ,
+	 (-40,27) and is of length 4 units and the third edge joining both lies between (-40,27) , (-34,23) all three edges 
+	 are made up by passing bd object to the world.
+	 */
 
 
     {
@@ -372,10 +384,12 @@ namespace cs296
       b1 = m_world->CreateBody(&bd);
       b1->CreateFixture(&shape, 0.0f);
     }
+    
 
     //ball with which pendulum collides
-    //!<B>10. Sphere ball with which pendulum collides</B>
-  /*!
+    
+    //!<B>11. Sphere ball with which pendulum collides</B>
+    /*!
     A ball is created with radius 1 unit with a pointer to b2Body as "spherebody" and the fixtures are given to the ball 
     through ballfd with density as 0.3 the ball is set up as a dynamic body ans is initially placed at (-18,24).
     Variable "ballbd" of type b2BodyDef is used to pass the ball object to the world object to create the spherical ball.
@@ -401,14 +415,18 @@ namespace cs296
 	  spherebody->CreateFixture(&ballfd);
 	
     }
-// curve
-  //!<B>11. Curved path used to guide the ball</B>
-  /*! Here we create a curved path joining 100 small edges preceeded by a long straight edge and followed by long 
-  straight horizontal platform of length 11 units, the point where any edge 
-  ends is used as the starting point for the next edge there by constituting a curved path the coordinates are evaluated 
-  using trigonometric calculations an functions like sine and cosine are used to give the sense of curvature to path
-  the library used for these functions is cmath , object "bd" is passed to worls to create curvature.
-  */
+    
+    
+	// curve
+	
+	//!<B>12. Curved path used to guide the ball</B>
+	/*! 
+	Here we create a curved path joining 100 small edges preceeded by a long straight edge and followed by long 
+	straight horizontal platform of length 11 units, the point where any edge 
+	ends is used as the starting point for the next edge there by constituting a curved path the coordinates are evaluated 
+	using trigonometric calculations an functions like sine and cosine are used to give the sense of curvature to path
+	the library used for these functions is cmath , object "bd" is passed to worls to create curvature.
+	*/
 
 
     for(int i = 0; i < 100; i++)
@@ -444,7 +462,8 @@ namespace cs296
     //The pulley system
     x = -25.0f;
     y = -3.0f;
-    //!<B>12. The Pulley System</B>
+    
+    //!<B>13. The Pulley System</B>
     /*!
     Variable "bd" of type b2BodyDef is used to pass the box and bar 
     which are on either sides of pully to the world object to create the objects. 
@@ -535,8 +554,9 @@ namespace cs296
 
 	//The revolving plank that holds the bar
 
-  //!<B>13. Revolving plank holding the bar</B>
-    /*Firstly a box is made of dimensions(3m, 0.25m) and its density is set as 1 and friction coefficient is 0.2 and the
+    //!<B>14. Revolving plank holding the bar</B>
+    /*!
+    Firstly a box is made of dimensions(3m, 0.25m) and its density is set as 1 and friction coefficient is 0.2 and the
     initial position is set as (19.5,26) object "bd" is passed to the world to create the bar.Now a very small square shaped
     box is made up which is used to show up the hinge point of the horizontal rotationary platform its size is (0.25,0.25)
     and is initially placed at (19.5, 25) ,finally object "bd" is passed to world for creating the object.Now at last 
@@ -591,8 +611,9 @@ namespace cs296
       m_world->CreateJoint(&jd);
     }
 
-//last rotating plank and box
-      //!<B>14. The revolving horizontal platform containing ball</B>
+	//last rotating plank and box
+	
+    //!<B>14. The revolving horizontal platform containing ball</B>
     /*!
     <p>The bar of the pulley hits the revolving platform. To design the revolving platform, 
     first of all we have to define shape of horizontal platform and that thing is done using variable named as "shape".
