@@ -677,6 +677,13 @@ namespace cs296
 
 
     //replacement for water
+    //!<B>14. The hydraulic lift</B>
+    /*!
+    <p>The ball from the revolving platform lands in the left column of the hydraulic lift. Due to this water in the right column rises and the flag is hoisted.
+    Here, the hydraulic lift is a box created using multiple edge shapes. Fluid objects are not available in box2d, so water is implemented by using small particles which give an effect similar to water.
+    So in this case the particles are circles of radius 0.25 units. 750 particles simulate the water in the hydraulic lift. They are generated using for loops. </p>
+    */
+
     x = 11.0;
     y = -15.0f;
 
