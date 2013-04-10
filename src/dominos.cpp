@@ -25,6 +25,7 @@
 
 #include "cs296_base.hpp"
 #include "render.hpp"
+#include <cmath>
 
 #ifdef __APPLE__
 	#include <GLUT/glut.h>
@@ -41,6 +42,71 @@ namespace cs296
 {
   dominos_t::dominos_t()
   {
+    
+    //Starter
+    float x = -40.0f;
+    float y = 52.5f;
+    {
+      
+      b2Body* horBar;
+      {
+        b2PolygonShape shape;
+        shape.SetAsBox(5.0f, 0.5f);
+      
+        b2BodyDef bd;
+        bd.type = b2_dynamicBody;
+        bd.position.Set(10.0f + x, 0.0f + y);
+        horBar = m_world->CreateBody(&bd);
+        horBar->CreateFixture(&shape, 10.0f);
+      }
+
+      b2Body* verBar;
+      {
+        b2PolygonShape shape;
+        shape.SetAsBox(0.5f, 5.0f);
+      
+        b2BodyDef bd;
+        bd.type = b2_dynamicBody;
+        bd.position.Set(15.0f + x, -5.0f + y);
+        verBar = m_world->CreateBody(&bd);
+        verBar->CreateFixture(&shape, 10.0f);
+      }
+
+      b2Body* hinge;
+      {
+        b2PolygonShape shape;
+        shape.SetAsBox(0.25f, 0.25f);
+      
+        b2BodyDef bd;
+        bd.position.Set(15.0f + x, 0.0f + y);
+        hinge = m_world->CreateBody(&bd);
+        hinge->CreateFixture(&shape, 10.0f);
+      }
+        
+      b2RevoluteJointDef jd;
+      b2Vec2 anchor;
+      anchor.Set(15.0f + x,0.0f + y);
+      jd.Initialize(horBar, verBar, anchor);
+      m_world->CreateJoint(&jd);
+
+      b2RevoluteJointDef hingej1;
+      b2Vec2 anchor1;
+      anchor1.Set(15.0f + x,0.0f + y);
+      hingej1.Initialize(hinge, verBar, anchor1);
+      m_world->CreateJoint(&hingej1);
+
+      b2RevoluteJointDef hingej2;
+      b2Vec2 anchor2;
+      anchor2.Set(15.0f + x,0.0f + y);
+      hingej2.Initialize(horBar, hinge, anchor2);
+      m_world->CreateJoint(&hingej2);
+
+      b2DistanceJointDef constraint;
+      constraint.Initialize(horBar, verBar, b2Vec2(10.0f + x, 0.0f + y), b2Vec2(15.0f + x, -5.0f + y));
+      constraint.collideConnected = true;
+      m_world->CreateJoint(&constraint);
+    }
+  
     //Ground
     b2Body* b1;
     {
@@ -52,92 +118,36 @@ namespace cs296
       b1->CreateFixture(&shape, 0.0f);
     }
     
-    //The tilted plank holding the sphere
-    {
-      b2PolygonShape shape;
-      shape.SetAsBox(4.0f, 0.25f,b2Vec2(-33.0f, 52.0f),-70.0f);
-	
-      b2BodyDef bd;
-      //bd.position.Set(-23.0f, 35.0f);
-      b2Body* ground = m_world->CreateBody(&bd);
-      ground->CreateFixture(&shape, 0.0f);
-    }
-    
-      
-    //The big sphere on top
-    {
-      b2Body* spherebody;
-	
-      b2CircleShape circle;
-      circle.m_radius = 3.0;
-	
-      b2FixtureDef ballfd;
-      ballfd.shape = &circle;
-      ballfd.density = 1.0f;
-      ballfd.friction = 0.0f;
-      ballfd.restitution = 0.0f;
-	
-      b2BodyDef ballbd;
-	  ballbd.type = b2_dynamicBody;
-	  ballbd.position.Set(-35.0f, 55.0f);
-	  spherebody = m_world->CreateBody(&ballbd);
-	  spherebody->CreateFixture(&ballfd);
-	
-    }
-    
-    //First tilted plank
-    /*{
-      b2PolygonShape shape;
-      shape.SetAsBox(4.0f, 0.25f,b2Vec2(-21.0f, 38.0f),70.0f);
-	
-      b2BodyDef bd;
-      //bd.position.Set(-23.0f, 35.0f);
-      b2Body* ground = m_world->CreateBody(&bd);
-      ground->CreateFixture(&shape, 0.0f);
-    }*/
-    
-    //Second tilted plank
-    {
-      b2PolygonShape shape;
-      shape.SetAsBox(4.0f, 0.25f,b2Vec2(-30.0f, 44.0f),-70.0f);
-	
-      b2BodyDef bd;
-      //bd.position.Set(-23.0f, 35.0f);
-      b2Body* ground = m_world->CreateBody(&bd);
-      ground->CreateFixture(&shape, 0.0f);
-    }
-    
     //The horizontal shelf holding the dominos
     {
-      b2PolygonShape shape;
-      shape.SetAsBox(8.0f, 0.25f);
-	
+
+      b2EdgeShape shape;
+      shape.Set(b2Vec2(-26.0f, 39.0f), b2Vec2(10.0f, 39.0f));
+  
       b2BodyDef bd;
-      bd.position.Set(-18.0f, 39.0f);
-      b2Body* ground = m_world->CreateBody(&bd);
-      ground->CreateFixture(&shape, 0.0f);
+      b1 = m_world->CreateBody(&bd);
+      b1->CreateFixture(&shape, 0.0f);
+
     }
-
-
 
     //Dominos
     {
       b2PolygonShape shape;
-      shape.SetAsBox(0.1f, 2.0f);
+      shape.SetAsBox(0.2f, 2.0f);
 	
       b2FixtureDef fd;
       fd.shape = &shape;
-      fd.density = 20.0f;
+      fd.density = 70.0f;
       fd.friction = 0.1f;
 		
       for (int i = 0; i <= 9; ++i)
-	{
-	  b2BodyDef bd;
-	  bd.type = b2_dynamicBody;
-	  bd.position.Set(-22.0f + 1.0f * i, 40.0f);
-	  b2Body* body = m_world->CreateBody(&bd);
-	  body->CreateFixture(&fd);
-	}
+    	{
+    	  b2BodyDef bd;
+    	  bd.type = b2_dynamicBody;
+    	  bd.position.Set(-22.0f + 2.3f * i, 40.0f);
+    	  b2Body* body = m_world->CreateBody(&bd);
+    	  body->CreateFixture(&fd);
+    	}
 	
 	
 	b2Body* spherebody;
@@ -147,250 +157,137 @@ namespace cs296
 	
       b2FixtureDef ballfd;
       ballfd.shape = &circle;
-      ballfd.density = 34.0f;
+      ballfd.density = 200.0f;
       ballfd.friction = 0.0f;
       ballfd.restitution = 0.0f;
 	
       b2BodyDef ballbd;
 	  ballbd.type = b2_dynamicBody;
-	  ballbd.position.Set(-10.0f, 40.0f);
+	  ballbd.position.Set(2.5f, 40.0f);
 	  spherebody = m_world->CreateBody(&ballbd);
 	  spherebody->CreateFixture(&ballfd);
-	  
-	  /*b2PolygonShape shape1;
-      shape1.SetAsBox(4.0f, 0.25f,b2Vec2(-9.0f, 23.0f),70.0f);
-	
-      b2BodyDef bd;
-      //bd.position.Set(-23.0f, 35.0f);
-      b2Body* ground = m_world->CreateBody(&bd);
-      ground->CreateFixture(&shape1, 0.0f);*/
+	 
     }
 
-
-
-
-  
-
     
-    //The see-saw system at the left
-  /*  {
-      //The triangle wedge
-      b2Body* sbody;
-      b2PolygonShape poly;
-      b2Vec2 vertices[3];
-      vertices[0].Set(-1,0);
-      vertices[1].Set(1,0);
-      vertices[2].Set(0,1.5);
-      poly.Set(vertices, 3);
-      b2FixtureDef wedgefd;
-      wedgefd.shape = &poly;
-      wedgefd.density = 10.0f;
-      wedgefd.friction = 0.0f;
-      wedgefd.restitution = 0.0f;
-      b2BodyDef wedgebd;
-      wedgebd.position.Set(-14.0f, 2.0f);
-      sbody = m_world->CreateBody(&wedgebd);
-      sbody->CreateFixture(&wedgefd);
-
-      //The plank on top of the wedge
-      b2PolygonShape shape;
-      shape.SetAsBox(8.0f, 0.2f);
-      b2BodyDef bd2;
-      bd2.position.Set(-14.0f, 3.73f);
-      bd2.type = b2_dynamicBody;
-      b2Body* body = m_world->CreateBody(&bd2);
-      b2FixtureDef *fd2 = new b2FixtureDef;
-      fd2->density = 1.f;
-      fd2->shape = new b2PolygonShape;
-      fd2->shape = &shape;
-      body->CreateFixture(fd2);
-
-      b2RevoluteJointDef jd;
-      b2Vec2 anchor;
-      anchor.Set(-14.0f, 3.73f);
-      jd.Initialize(sbody, body, anchor);
-      m_world->CreateJoint(&jd);
-
-      //The light box on the right side of the see-saw
-      b2PolygonShape shape2;
-      shape2.SetAsBox(1.0f, 1.0f);
-      b2BodyDef bd3;
-      bd3.position.Set(-19.0f, 5.73f);
-      bd3.type = b2_dynamicBody;
-      b2Body* body3 = m_world->CreateBody(&bd3);
-      b2FixtureDef *fd3 = new b2FixtureDef;
-      fd3->density = 2.0f;
-      fd3->shape = new b2PolygonShape;
-      fd3->shape = &shape2;
-      body3->CreateFixture(fd3);
-      
-      b2PolygonShape shape3;
-      shape3.SetAsBox(1.0f, 1.0f);
-      b2BodyDef bd4;
-      bd4.position.Set(-9.0f, 5.73f);
-      bd4.type = b2_dynamicBody;
-      b2Body* body4 = m_world->CreateBody(&bd4);
-      b2FixtureDef *fd4 = new b2FixtureDef;
-      fd4->density = 2.0f;
-      fd4->shape = new b2PolygonShape;
-      fd4->shape = &shape3;
-      body4->CreateFixture(fd4);
-    }*/
-    
-	//Horizontal shelf with a train of balls on the left
-   /* {
-      b2PolygonShape shape;
-      shape.SetAsBox(6.0f, 0.25f, b2Vec2(-30.0f,20.0f), 0.0f);
-	
-      b2BodyDef bd;
-      //bd.position.Set(1.0f, 6.0f);
-      b2Body* ground = m_world->CreateBody(&bd);
-      ground->CreateFixture(&shape, 0.0f);
-    }
-    
-    //The train of balls on the left
-    {
-		b2Body* spherebody;
-	
-      b2CircleShape circle;
-      circle.m_radius = 1.0;
-	
-      b2FixtureDef ballfd;
-      ballfd.shape = &circle;
-      ballfd.density = 3.3f;
-      ballfd.friction = 0.0f;
-      ballfd.restitution = 0.0f;
-	
-      for (int i = 0; i < 4; ++i)
-	{
-	  b2BodyDef ballbd;
-	  ballbd.type = b2_dynamicBody;
-	  ballbd.position.Set(-34.0f+1.0f*i, 21.0f);
-	  spherebody = m_world->CreateBody(&ballbd);
-	  spherebody->CreateFixture(&ballfd);
-	}      
-  }
-  
-	 //The goal box on the left
-     {
-	  b2BodyDef *bd = new b2BodyDef;
-      //bd->type = b2_dynamicBody;
-      bd->position.Set(-40,0);
-      //bd->fixedRotation = true;
- 
-      b2FixtureDef *fd1 = new b2FixtureDef;
-      fd1->density = 10.0;
-      fd1->friction = 0.5;
-      fd1->restitution = 1.f;
-      fd1->shape = new b2PolygonShape;
-      b2PolygonShape bs1;
-      bs1.SetAsBox(3,0.2, b2Vec2(0.f,-2.8f), 0);
-      fd1->shape = &bs1;
-      b2FixtureDef *fd2 = new b2FixtureDef;
-      fd2->density = 10.0;
-      fd2->friction = 0.5;
-      fd2->restitution = 0.f;
-      fd2->shape = new b2PolygonShape;
-      b2PolygonShape bs2;
-      bs2.SetAsBox(0.2,3, b2Vec2(2.5f,0.f), 0);
-      fd2->shape = &bs2;
-      b2FixtureDef *fd3 = new b2FixtureDef;
-      fd3->density = 10.0;
-      fd3->friction = 0.5;
-      fd3->restitution = 0.f;
-      fd3->shape = new b2PolygonShape;
-      b2PolygonShape bs3;
-      bs3.SetAsBox(0.2,3, b2Vec2(-2.5f,0.f), 0);
-      fd3->shape = &bs3;
-       
-      b2Body* box1 = m_world->CreateBody(bd);
-      box1->CreateFixture(fd1);
-      box1->CreateFixture(fd2);
-      box1->CreateFixture(fd3);
-  }
-  
-  //The second goal box on the left (after all spheres boune out of the first)
-     {
-	  b2BodyDef *bd = new b2BodyDef;
-      //bd->type = b2_dynamicBody;
-      bd->position.Set(-48,0);
-      //bd->fixedRotation = true;
- 
-      b2FixtureDef *fd1 = new b2FixtureDef;
-      fd1->density = 10.0;
-      fd1->friction = 1.0f;
-      fd1->restitution = 0.1f;
-      fd1->shape = new b2PolygonShape;
-      b2PolygonShape bs1;
-      bs1.SetAsBox(1.5,0.2, b2Vec2(0.f,-2.8f), 0);
-      fd1->shape = &bs1;
-      b2FixtureDef *fd2 = new b2FixtureDef;
-      fd2->density = 10.0;
-      fd2->friction = 0.5;
-      fd2->restitution = 0.f;
-      fd2->shape = new b2PolygonShape;
-      b2PolygonShape bs2;
-      bs2.SetAsBox(0.2,3, b2Vec2(1.8f,0.f), 0);
-      fd2->shape = &bs2;
-      b2FixtureDef *fd3 = new b2FixtureDef;
-      fd3->density = 10.0;
-      fd3->friction = 0.5;
-      fd3->restitution = 0.f;
-      fd3->shape = new b2PolygonShape;
-      b2PolygonShape bs3;
-      bs3.SetAsBox(0.2,3, b2Vec2(-1.8f,0.f), 0);
-      fd3->shape = &bs3;
-       
-      b2Body* box1 = m_world->CreateBody(bd);
-      box1->CreateFixture(fd1);
-      box1->CreateFixture(fd2);
-      box1->CreateFixture(fd3);
-  }*/
-
-	
     //The pendulum that the dominos knock off
+    x = -17.0f;
+    y = 28.0f;
     {
       b2Body* b2;
       {
-	b2PolygonShape shape;
-	shape.SetAsBox(0.15f, 0.150f);
-	  
-	b2BodyDef bd;
-	bd.position.Set(-23.5f, 34.0f);
-	b2 = m_world->CreateBody(&bd);
-	b2->CreateFixture(&shape, 10.0f);
+      	b2PolygonShape shape;
+      	shape.SetAsBox(0.15f, 0.150f);
+      	  
+      	b2BodyDef bd;
+      	bd.position.Set(0.0f + x, 6.0f + y);
+      	b2 = m_world->CreateBody(&bd);
+      	b2->CreateFixture(&shape, 10.0f);
       }
 	
       b2Body* b4;
       {
-	b2PolygonShape shape;
-	shape.SetAsBox(0.5f, 0.5f);
-	  
-	b2BodyDef bd;
-	bd.type = b2_dynamicBody;
-	bd.position.Set(-23.5f, 22.0f);
-	b4 = m_world->CreateBody(&bd);
-	b4->CreateFixture(&shape, 4.0f);
+      	b2PolygonShape shape;
+      	shape.SetAsBox(0.5f, 0.5f);
+      	  
+      	b2BodyDef bd;
+      	bd.type = b2_dynamicBody;
+
+        b2FixtureDef fd;
+        fd.shape = &shape;
+        fd.friction = 0.0f;
+        fd.density = 20.0f;
+        fd.restitution = 1.0f;
+
+      	bd.position.Set(6.0f + x, -1.0f + y);
+      	b4 = m_world->CreateBody(&bd);
+      	b4->CreateFixture(&fd);
       }
 	
       b2RevoluteJointDef jd;
       b2Vec2 anchor;
-      anchor.Set(-23.5f, 34.0f);
+      anchor.Set(0.0f + x, 6.0f + y);
       jd.Initialize(b2, b4, anchor);
       m_world->CreateJoint(&jd);
     }
-//ground where collision with pendulum of ball
-	{
-      b2PolygonShape shape;
-      shape.SetAsBox(6.0f, 0.25f);
-	
+
+    /*{
+      b2EdgeShape shape;
+      shape.Set(b2Vec2(-5.0f + x, -16.0f + y), b2Vec2(-5.0f + x,-5.0f + y ));
+  
       b2BodyDef bd;
-      bd.position.Set(-31.0f, 21.0f);
-      b2Body* ground = m_world->CreateBody(&bd);
-      ground->CreateFixture(&shape, 0.0f);
+      b1 = m_world->CreateBody(&bd);
+      b1->CreateFixture(&shape, 3.0f);
+    }*/
+
+
+    {
+      b2EdgeShape shape;
+      shape.Set(b2Vec2(-15.0f + x, -16.0f + y), b2Vec2(10.0f + x,-16.0f + y ));
+  
+      b2BodyDef bd;
+      b1 = m_world->CreateBody(&bd);
+      b1->CreateFixture(&shape, 3.0f);
     }
 
-//ball with which pendulum collides
+    {
+      b2EdgeShape shape;
+      shape.Set(b2Vec2(-15.0f + x, -16.0f + y), b2Vec2(-15.0f + x,-5.0f + y ));
+  
+      b2BodyDef bd;
+      b1 = m_world->CreateBody(&bd);
+      b1->CreateFixture(&shape, 3.0f);
+    }
+
+    b2Body* verBar;
+    {
+        b2PolygonShape shape;
+        shape.SetAsBox(0.5f, 7.0f);
+      
+        b2BodyDef bd;
+        bd.type = b2_dynamicBody;
+        bd.position.Set(6.0f + x, -11.0f + y);
+
+        b2FixtureDef fd;
+        fd.shape = &shape;
+        fd.density = 0.1f;
+        fd.friction = 0.1f;
+        fd.restitution = 0.0f;
+  
+        verBar = m_world->CreateBody(&bd);
+        verBar->CreateFixture(&fd);
+    }
+
+
+//edges
+    {
+      b2EdgeShape shape;
+      shape.Set(b2Vec2(-40.0f,23.0f), b2Vec2(-18.0f,23.0f));
+  
+      b2BodyDef bd;
+      b1 = m_world->CreateBody(&bd);
+      b1->CreateFixture(&shape, 0.0f);
+    }
+
+    {
+      b2EdgeShape shape;
+      shape.Set(b2Vec2(-40.0f,23.0f), b2Vec2(-40.0f,27.0f));
+  
+      b2BodyDef bd;
+      b1 = m_world->CreateBody(&bd);
+      b1->CreateFixture(&shape, 0.0f);
+    }
+
+    {
+      b2EdgeShape shape;
+      shape.Set(b2Vec2(-40.0f,27.0f), b2Vec2(-34.0f,23.0f));
+  
+      b2BodyDef bd;
+      b1 = m_world->CreateBody(&bd);
+      b1->CreateFixture(&shape, 0.0f);
+    }
+
+    //ball with which pendulum collides
 	  {
       b2Body* spherebody;
 	
@@ -399,193 +296,53 @@ namespace cs296
 	
       b2FixtureDef ballfd;
       ballfd.shape = &circle;
-      ballfd.density = 1.0f;
+      ballfd.density = 0.3f;
       ballfd.friction = 0.0f;
       ballfd.restitution = 0.0f;
 	
       b2BodyDef ballbd;
 	  ballbd.type = b2_dynamicBody;
-	  ballbd.position.Set(-27.0f, 22.0f);
+	  ballbd.position.Set(-18.0f, 24.0f);
 	  spherebody = m_world->CreateBody(&ballbd);
 	  spherebody->CreateFixture(&ballfd);
 	
     }
-// tilted platform for direction of ball
-{
-      b2PolygonShape shape;
-      shape.SetAsBox(4.0f, 0.25f,b2Vec2(-40.0f, 16.0f),-70.0f);
-	
-      b2BodyDef bd;
-      //bd.position.Set(-23.0f, 35.0f);
-      b2Body* ground = m_world->CreateBody(&bd);
-      ground->CreateFixture(&shape, 0.0f);
-    }
-//straight directng platform
-{
-      b2PolygonShape shape;
-      shape.SetAsBox(5.0f, 0.25f);
-	
-      b2BodyDef bd;
-      bd.position.Set(-32.0f, 11.0f);
-      b2Body* ground = m_world->CreateBody(&bd);
-      ground->CreateFixture(&shape, 0.0f);
-    }
+// curve
 
-    
-    //The revolving plank that holds the sphere to trigger further simulation
-   /* {
-      b2Body* b2;
-      {
-	b2PolygonShape shape;
-	shape.SetAsBox(0.25f, 0.25f);
-	  
-	b2BodyDef bd;
-	bd.position.Set(5.0f, 36.0f);
-	b2 = m_world->CreateBody(&bd);
-	b2->CreateFixture(&shape, 10.0f);
-      }
-	
-      b2Body* b4;
-      {
-	b2PolygonShape shape;
-	shape.SetAsBox(5.0f, 0.25f);
-	  
-	b2BodyDef bd;
-	bd.type = b2_dynamicBody;
-	bd.position.Set(5.0f, 36.0f);
-	b4 = m_world->CreateBody(&bd);
-	b4->CreateFixture(&shape, 4.0f);
-      }
-	
-      b2RevoluteJointDef jd;
-      b2Vec2 anchor;
-      anchor.Set(5.0f, 36.0f);
-      jd.Initialize(b2, b4, anchor);
-      m_world->CreateJoint(&jd);
-    }*/
-    
-    //The sphere on top that triggers
-    /*{
-      b2Body* spherebody;
-	
-      b2CircleShape circle;
-      circle.m_radius = 2.0;
-	
-      b2FixtureDef ballfd;
-      ballfd.shape = &circle;
-      ballfd.density = 4.0f;
-      ballfd.friction = 0.0f;
-      ballfd.restitution = 0.0f;
-	
-      b2BodyDef ballbd;
-	  ballbd.type = b2_dynamicBody;
-	  ballbd.position.Set(5.0f, 38.0f);
-	  spherebody = m_world->CreateBody(&ballbd);
-	  spherebody->CreateFixture(&ballfd);
-	
-    }*/
-    
-    //The see-saw system at the bottom
-    /*{
-      //The triangle wedge
-      b2Body* sbody;
-      b2PolygonShape poly;
-      b2Vec2 vertices[3];
-      vertices[0].Set(-1,0);
-      vertices[1].Set(1,0);
-      vertices[2].Set(0,1.5);
-      poly.Set(vertices, 3);
-      b2FixtureDef wedgefd;
-      wedgefd.shape = &poly;
-      wedgefd.density = 10.0f;
-      wedgefd.friction = 0.0f;
-      wedgefd.restitution = 0.0f;
-      b2BodyDef wedgebd;
-      wedgebd.position.Set(8.0f, 2.0f);
-      sbody = m_world->CreateBody(&wedgebd);
-      sbody->CreateFixture(&wedgefd);
-
-      //The plank on top of the wedge
-      b2PolygonShape shape;
-      shape.SetAsBox(10.0f, 0.2f);
-      b2BodyDef bd2;
-      bd2.position.Set(8.0f, 3.73f);
-      bd2.type = b2_dynamicBody;
-      b2Body* body = m_world->CreateBody(&bd2);
-      b2FixtureDef *fd2 = new b2FixtureDef;
-      fd2->density = 1.f;
-      fd2->shape = new b2PolygonShape;
-      fd2->shape = &shape;
-      body->CreateFixture(fd2);
-
-      b2RevoluteJointDef jd;
-      b2Vec2 anchor;
-      anchor.Set(8.0f, 3.73f);
-      jd.Initialize(sbody, body, anchor);
-      m_world->CreateJoint(&jd);
-
-      //The light box on the right side of the see-saw
-      b2PolygonShape shape2;
-      shape2.SetAsBox(1.0f, 1.0f);
-      b2BodyDef bd3;
-      bd3.position.Set(0.0f, 5.73f);
-      bd3.type = b2_dynamicBody;
-      b2Body* body3 = m_world->CreateBody(&bd3);
-      b2FixtureDef *fd3 = new b2FixtureDef;
-      fd3->density = 2.0f;
-      fd3->shape = new b2PolygonShape;
-      fd3->shape = &shape2;
-      body3->CreateFixture(fd3);
-      
-      b2PolygonShape shape3;
-      shape3.SetAsBox(1.0f, 1.0f);
-      b2BodyDef bd4;
-      bd4.position.Set(16.0f, 5.73f);
-      bd4.type = b2_dynamicBody;
-      b2Body* body4 = m_world->CreateBody(&bd4);
-      b2FixtureDef *fd4 = new b2FixtureDef;
-      fd4->density = 2.0f;
-      fd4->shape = new b2PolygonShape;
-      fd4->shape = &shape3;
-      body4->CreateFixture(fd4);
-    }*/
-    
-    //Horizontal shelf with a train of balls
-   /* {
-      b2PolygonShape shape;
-      shape.SetAsBox(6.0f, 0.25f, b2Vec2(24.0f,20.0f), 0.0f);
-	
-      b2BodyDef bd;
-      //bd.position.Set(1.0f, 6.0f);
-      b2Body* ground = m_world->CreateBody(&bd);
-      ground->CreateFixture(&shape, 0.0f);
-    }
-    
-    //The train of balls
+    for(int i = 0; i < 100; i++)
     {
-		b2Body* spherebody;
-	
-      b2CircleShape circle;
-      circle.m_radius = 1.0;
-	
-      b2FixtureDef ballfd;
-      ballfd.shape = &circle;
-      ballfd.density = 3.3f;
-      ballfd.friction = 0.0f;
-      ballfd.restitution = 0.0f;
-	
-      for (int i = 0; i < 4; ++i)
-	{
-	  b2BodyDef ballbd;
-	  ballbd.type = b2_dynamicBody;
-	  ballbd.position.Set(25.0f+1.0f*i, 22.0f);
-	  spherebody = m_world->CreateBody(&ballbd);
-	  spherebody->CreateFixture(&ballfd);
-	}      
-  }*/
+      int r = 6;
+      b2EdgeShape shape;
+      shape.Set(b2Vec2(-r*cos(i*3.14159/200) - 39.0f,-r*sin(i*3.14159/200) + 14.0f), 
+                b2Vec2(-r*cos((i+1)*3.14159/200) - 39.0f,-r*sin((i+1)*3.14159/200) + 14.0f));
+  
+      b2BodyDef bd;
+      b1 = m_world->CreateBody(&bd);
+      b1->CreateFixture(&shape, 0.0f);
+    }
 
-   
+    {
+      b2EdgeShape shape;
+      shape.Set(b2Vec2(-45.0f,14.0f), b2Vec2(-45.0f,18.0f));
+  
+      b2BodyDef bd;
+      b1 = m_world->CreateBody(&bd);
+      b1->CreateFixture(&shape, 0.0f);
+    }
+
+//straight directng platform
+    {
+      b2EdgeShape shape;
+      shape.Set(b2Vec2(-39.0f,8.0f), b2Vec2(-28.0f,8.0f));
+  
+      b2BodyDef bd;
+      b1 = m_world->CreateBody(&bd);
+      b1->CreateFixture(&shape, 0.0f);
+    }
+
     //The pulley system
+    x = -25.0f;
+    y = -3.0f;
     {
       b2BodyDef *bd = new b2BodyDef;
       bd->type = b2_dynamicBody;
@@ -594,29 +351,38 @@ namespace cs296
       
       //The open box
       b2FixtureDef *fd1 = new b2FixtureDef;
-      fd1->density = 10.0;
+      fd1->density = 1.0;
       fd1->friction = 0.5;
       fd1->restitution = 0.f;
       fd1->shape = new b2PolygonShape;
       b2PolygonShape bs1;
-      bs1.SetAsBox(2,0.2, b2Vec2(-25.f,-2.8f), 0);
+      bs1.SetAsBox(4,0.2, b2Vec2(0.0f + x,-2.8f + y), 0);
       fd1->shape = &bs1;
       b2FixtureDef *fd2 = new b2FixtureDef;
-      fd2->density = 10.0;
+      fd2->density = 1.0;
       fd2->friction = 0.5;
       fd2->restitution = 0.f;
       fd2->shape = new b2PolygonShape;
       b2PolygonShape bs2;
-      bs2.SetAsBox(0.2,3, b2Vec2(-23.0f,0.f), 0);
+      bs2.SetAsBox(0.2,3, b2Vec2(4.0f + x,0.0f + y), 0);
       fd2->shape = &bs2;
       b2FixtureDef *fd3 = new b2FixtureDef;
-      fd3->density = 10.0;
+      fd3->density = 1.0;
       fd3->friction = 0.5;
       fd3->restitution = 0.f;
       fd3->shape = new b2PolygonShape;
       b2PolygonShape bs3;
-      bs3.SetAsBox(0.2,3, b2Vec2(-27.0f,0.f), 0);
+      bs3.SetAsBox(0.2,3, b2Vec2(-4.0f + x,0.0f + y), 0);
       fd3->shape = &bs3;
+
+      b2FixtureDef *fd4 = new b2FixtureDef;
+      fd4->density = 1.0;
+      fd4->friction = 0.5;
+      fd4->restitution = 0.f;
+      fd4->shape = new b2PolygonShape;
+      b2PolygonShape bs4;
+      bs4.SetAsBox(2,0.2, b2Vec2(0.0f + x,-2.8f + y), 0);
+      fd4->shape = &bs4;
        
       b2Body* box1 = m_world->CreateBody(bd);
       box1->CreateFixture(fd1);
@@ -625,16 +391,16 @@ namespace cs296
 
       //The bar
       bd->position.Set(9,5);	
-      fd1->density = 43.0;	  
+      fd4->density = 5.1;	  
       b2Body* box2 = m_world->CreateBody(bd);
-      box2->CreateFixture(fd1);
+      box2->CreateFixture(fd4);
 
       // The pulley joint
       b2PulleyJointDef* myjoint = new b2PulleyJointDef();
-      b2Vec2 worldAnchorOnBody1(-25, 5); // Anchor point on body 1 in world axis
-      b2Vec2 worldAnchorOnBody2(-16, 5); // Anchor point on body 2 in world axis
-      b2Vec2 worldAnchorGround1(-25, 9); // Anchor point for ground 1 in world axis
-      b2Vec2 worldAnchorGround2(-16, 9); // Anchor point for ground 2 in world axis
+      b2Vec2 worldAnchorOnBody1(x, 5 + y); // Anchor point on body 1 in world axis
+      b2Vec2 worldAnchorOnBody2(x + 9, 5 + y); // Anchor point on body 2 in world axis
+      b2Vec2 worldAnchorGround1(x, 9 + y); // Anchor point for ground 1 in world axis
+      b2Vec2 worldAnchorGround2(x + 9, 9 + y); // Anchor point for ground 2 in world axis
       float32 ratio = 1.0f; // Define ratio
       myjoint->Initialize(box1, box2, worldAnchorGround1, worldAnchorGround2, box1->GetWorldCenter(), box2->GetWorldCenter(), ratio);
       m_world->CreateJoint(myjoint);
@@ -648,29 +414,29 @@ namespace cs296
 	{
       b2PolygonShape shape;
       shape.SetAsBox(3.0f, 0.25f);
-	b2FixtureDef fd;
+	     b2FixtureDef fd;
       fd.shape = &shape;
       fd.density = 1.0f;
       fd.friction = 0.2f;
 	
 	
       b2BodyDef bd;
-	bd.type = b2_dynamicBody;
-      bd.position.Set(-3.0f, 31.0f);
+	    bd.type = b2_dynamicBody;
+      bd.position.Set(19.5f, 26.0f);
       b2Body* ground = m_world->CreateBody(&bd);
       ground->CreateFixture(&shape, 0.0f);
-	ground->CreateFixture(&fd);
+	    ground->CreateFixture(&fd);
     }
     {
       b2Body* b2;
       {
-	b2PolygonShape shape;
-	shape.SetAsBox(0.25f, 0.25f);
-	  
-	b2BodyDef bd;
-	bd.position.Set(-3.0f, 30.0f);
-	b2 = m_world->CreateBody(&bd);
-	b2->CreateFixture(&shape, 10.0f);
+      	b2PolygonShape shape;
+      	shape.SetAsBox(0.25f, 0.25f);
+      	  
+      	b2BodyDef bd;
+      	bd.position.Set(19.5f, 25.0f);
+      	b2 = m_world->CreateBody(&bd);
+      	b2->CreateFixture(&shape, 10.0f);
       }
 	
       b2Body* b4;
@@ -680,229 +446,35 @@ namespace cs296
 	  
 	b2BodyDef bd;
 	bd.type = b2_dynamicBody;
-	bd.position.Set(-3.0f, 30.0f);
+	bd.position.Set(19.5f, 25.0f);
 	b4 = m_world->CreateBody(&bd);
 	b4->CreateFixture(&shape, 4.0f);
       }
 	
       b2RevoluteJointDef jd;
       b2Vec2 anchor;
-      anchor.Set(-3.0f, 30.0f);
+      anchor.Set(19.5f, 25.0f);
       jd.Initialize(b2, b4, anchor);
       m_world->CreateJoint(&jd);
     }
-/*//pulley horizontal motion stopper
-{
-      b2PolygonShape shape;
-      shape.SetAsBox(6.0f, 0.25f);
-	
-      b2BodyDef bd;
-      bd.position.Set(-33.5f, 8.0f);
-      b2Body* ground = m_world->CreateBody(&bd);
-      ground->CreateFixture(&shape, 0.0f);
-    }
-
-// tilted platform for first ball
- {
-      b2PolygonShape shape;
-      shape.SetAsBox(6.0f, 0.25f,b2Vec2(-10.0f, 18.0f),0.4f);
-	
-      b2BodyDef bd;
-      //bd.position.Set(-23.0f, 35.0f);
-      b2Body* ground = m_world->CreateBody(&bd);
-      ground->CreateFixture(&shape, 0.0f);
-    }*/
-    
-    //The sphere on top that triggers the goal
-    /*{
-      b2Body* spherebody;
-	
-      b2CircleShape circle;
-      circle.m_radius = 2.0;
-	
-      b2FixtureDef ballfd;
-      ballfd.shape = &circle;
-      ballfd.density = 4.0f;
-      ballfd.friction = 0.0f;
-      ballfd.restitution = 0.0f;
-	
-      b2BodyDef ballbd;
-	  ballbd.type = b2_dynamicBody;
-	  ballbd.position.Set(45.0f, 16.0f);
-	  spherebody = m_world->CreateBody(&ballbd);
-	  spherebody->CreateFixture(&ballfd);
-	
-    }*/
-    
-    //Final tilted plank
-   /* {
-      b2PolygonShape shape;
-      shape.SetAsBox(4.0f, 0.25f,b2Vec2(50.0f, 7.0f),70.0f);
-	
-      b2BodyDef bd;
-      //bd.position.Set(-23.0f, 35.0f);
-      b2Body* ground = m_world->CreateBody(&bd);
-      ground->CreateFixture(&shape, 0.0f);
-    }*/
-    
-     //The goal box
- /*    {
-	  b2BodyDef *bd = new b2BodyDef;
-      //bd->type = b2_dynamicBody;
-      bd->position.Set(44,0);
-      //bd->fixedRotation = true;
- 
-      b2FixtureDef *fd1 = new b2FixtureDef;
-      fd1->density = 10.0;
-      fd1->friction = 0.5;
-      fd1->restitution = 0.f;
-      fd1->shape = new b2PolygonShape;
-      b2PolygonShape bs1;
-      bs1.SetAsBox(3,0.2, b2Vec2(0.f,-2.8f), 0);
-      fd1->shape = &bs1;
-      b2FixtureDef *fd2 = new b2FixtureDef;
-      fd2->density = 10.0;
-      fd2->friction = 0.5;
-      fd2->restitution = 0.f;
-      fd2->shape = new b2PolygonShape;
-      b2PolygonShape bs2;
-      bs2.SetAsBox(0.2,3, b2Vec2(2.5f,0.f), 0);
-      fd2->shape = &bs2;
-      b2FixtureDef *fd3 = new b2FixtureDef;
-      fd3->density = 10.0;
-      fd3->friction = 0.5;
-      fd3->restitution = 0.f;
-      fd3->shape = new b2PolygonShape;
-      b2PolygonShape bs3;
-      bs3.SetAsBox(0.2,3, b2Vec2(-2.5f,0.f), 0);
-      fd3->shape = &bs3;
-       
-      b2Body* box1 = m_world->CreateBody(bd);
-      box1->CreateFixture(fd1);
-      box1->CreateFixture(fd2);
-      box1->CreateFixture(fd3);
-  }*/
-
-   /* //The revolving horizontal platform
-    {
-      b2PolygonShape shape;
-      shape.SetAsBox(2.2f, 0.2f);
-	
-      b2BodyDef bd;
-      bd.position.Set(14.0f, 14.0f);
-      bd.type = b2_dynamicBody;
-      b2Body* body = m_world->CreateBody(&bd);
-      b2FixtureDef *fd = new b2FixtureDef;
-      fd->density = 1.f;
-      fd->shape = new b2PolygonShape;
-      fd->shape = &shape;
-      body->CreateFixture(fd);
-
-      b2PolygonShape shape2;
-      shape2.SetAsBox(0.2f, 2.0f);
-      b2BodyDef bd2;
-      bd2.position.Set(14.0f, 16.0f);
-      b2Body* body2 = m_world->CreateBody(&bd2);
-
-      b2RevoluteJointDef jointDef;
-      jointDef.bodyA = body;
-      jointDef.bodyB = body2;
-      jointDef.localAnchorA.Set(0,0);
-      jointDef.localAnchorB.Set(0,0);
-      jointDef.collideConnected = false;
-      m_world->CreateJoint(&jointDef);
-    }
-
-    //The heavy sphere on the platform
-    {
-      b2Body* sbody;
-      b2CircleShape circle;
-      circle.m_radius = 1.0;
-	
-      b2FixtureDef ballfd;
-      ballfd.shape = &circle;
-      ballfd.density = 50.0f;
-      ballfd.friction = 0.0f;
-      ballfd.restitution = 0.0f;
-      b2BodyDef ballbd;
-      ballbd.type = b2_dynamicBody;
-      ballbd.position.Set(14.0f, 18.0f);
-      sbody = m_world->CreateBody(&ballbd);
-      sbody->CreateFixture(&ballfd);
-    }
-
-
-    //The see-saw system at the bottom
-    {
-      //The triangle wedge
-      b2Body* sbody;
-      b2PolygonShape poly;
-      b2Vec2 vertices[3];
-      vertices[0].Set(-1,0);
-      vertices[1].Set(1,0);
-      vertices[2].Set(0,1.5);
-      poly.Set(vertices, 3);
-      b2FixtureDef wedgefd;
-      wedgefd.shape = &poly;
-      wedgefd.density = 10.0f;
-      wedgefd.friction = 0.0f;
-      wedgefd.restitution = 0.0f;
-      b2BodyDef wedgebd;
-      wedgebd.position.Set(30.0f, 0.0f);
-      sbody = m_world->CreateBody(&wedgebd);
-      sbody->CreateFixture(&wedgefd);
-
-      //The plank on top of the wedge
-      b2PolygonShape shape;
-      shape.SetAsBox(15.0f, 0.2f);
-      b2BodyDef bd2;
-      bd2.position.Set(30.0f, 1.5f);
-      bd2.type = b2_dynamicBody;
-      b2Body* body = m_world->CreateBody(&bd2);
-      b2FixtureDef *fd2 = new b2FixtureDef;
-      fd2->density = 1.f;
-      fd2->shape = new b2PolygonShape;
-      fd2->shape = &shape;
-      body->CreateFixture(fd2);
-
-      b2RevoluteJointDef jd;
-      b2Vec2 anchor;
-      anchor.Set(30.0f, 1.5f);
-      jd.Initialize(sbody, body, anchor);
-      m_world->CreateJoint(&jd);
-
-      //The light box on the right side of the see-saw
-      b2PolygonShape shape2;
-      shape2.SetAsBox(2.0f, 2.0f);
-      b2BodyDef bd3;
-      bd3.position.Set(40.0f, 2.0f);
-      bd3.type = b2_dynamicBody;
-      b2Body* body3 = m_world->CreateBody(&bd3);
-      b2FixtureDef *fd3 = new b2FixtureDef;
-      fd3->density = 0.01f;
-      fd3->shape = new b2PolygonShape;
-      fd3->shape = &shape2;
-      body3->CreateFixture(fd3);
-    }*/
-
 
 //last rotating plank and box
 
 	{
-      b2PolygonShape shape;
-      shape.SetAsBox(1.0f, 1.0f);
-	b2FixtureDef fd;
+      b2CircleShape shape;
+      shape.m_radius = 1.9f;
+	    b2FixtureDef fd;
       fd.shape = &shape;
-      fd.density = 1.0f;
-      fd.friction = 0.2f;
+      fd.density = 60.0f;
+      fd.friction = 0.0f;
 	
 	
       b2BodyDef bd;
-	bd.type = b2_dynamicBody;
-      bd.position.Set(-13.0f, 7.0f);
+	    bd.type = b2_dynamicBody;
+      bd.position.Set(-6.35f, 5.0f);
       b2Body* ground = m_world->CreateBody(&bd);
       ground->CreateFixture(&shape, 0.0f);
-	ground->CreateFixture(&fd);
+	   ground->CreateFixture(&fd);
     }
     {
       b2Body* b2;
@@ -911,7 +483,7 @@ namespace cs296
 	shape.SetAsBox(0.25f, 0.25f);
 	  
 	b2BodyDef bd;
-	bd.position.Set(-13.0f, 6.0f);
+	bd.position.Set(-6.35f, 4.0f);
 	b2 = m_world->CreateBody(&bd);
 	b2->CreateFixture(&shape, 10.0f);
       }
@@ -919,23 +491,199 @@ namespace cs296
       b2Body* b4;
       {
 	b2PolygonShape shape;
-	shape.SetAsBox(2.0f, .25f);
+	shape.SetAsBox(8.0f, .25f);
 	  
 	b2BodyDef bd;
 	bd.type = b2_dynamicBody;
-	bd.position.Set(-13.0f, 6.0f);
+	bd.position.Set(-6.35f, 4.0f);
 	b4 = m_world->CreateBody(&bd);
 	b4->CreateFixture(&shape, 4.0f);
       }
 	
       b2RevoluteJointDef jd;
       b2Vec2 anchor;
-      anchor.Set(-13.0f, 6.0f);
+      anchor.Set(-6.35f, 4.0f);
       jd.Initialize(b2, b4, anchor);
       m_world->CreateJoint(&jd);
     }
 
+
+
+    //replacement for water
+    x = 11.0;
+    y = -15.0f;
+
+    {
+
+      b2BodyDef *bd = new b2BodyDef;
+      bd->type = b2_dynamicBody;
+      bd->position.Set(x,y);
+      bd->fixedRotation = true;
+
+      b2FixtureDef *fd1 = new b2FixtureDef;
+      fd1->density = 1.0;
+      fd1->friction = 0.5;
+      fd1->restitution = 0.f;
+      fd1->shape = new b2PolygonShape;
+      b2PolygonShape bs1;
+      bs1.SetAsBox(0.25,5.0, b2Vec2(-3.0f + x,40.0f + y), 0);
+      fd1->shape = &bs1;
+      b2FixtureDef *fd2 = new b2FixtureDef;
+      fd2->density = 1.0;
+      fd2->friction = 0.5;
+      fd2->restitution = 0.f;
+      fd2->shape = new b2PolygonShape;
+      b2PolygonShape bs2;
+      bs2.SetAsBox(2.0,1.0, b2Vec2(-1.0f + x,44.0f + y), 0);
+      fd2->shape = &bs2;
+
+      b2Body* box1 = m_world->CreateBody(bd);
+      box1->CreateFixture(fd1);
+      box1->CreateFixture(fd2);
+      
+    }
+
+    
+    {
+      b2EdgeShape shape;
+      shape.Set(b2Vec2(x - 10.0f,y), b2Vec2(x + 10.0f,y));
+  
+      b2BodyDef bd;
+      b1 = m_world->CreateBody(&bd);
+      b1->CreateFixture(&shape, 0.0f);
+    }
+
+    {
+      b2EdgeShape shape;
+      shape.Set(b2Vec2(x - 10.0f,y + 16.0f), b2Vec2(x - 10.0f,y));
+  
+      b2BodyDef bd;
+      b1 = m_world->CreateBody(&bd);
+      b1->CreateFixture(&shape, 0.0f);
+    }
+
+    {
+      b2EdgeShape shape;
+      shape.Set(b2Vec2(x - 6.0f,y + 16.0f), b2Vec2(x - 6.0f,y + 4.0f));
+  
+      b2BodyDef bd;
+      b1 = m_world->CreateBody(&bd);
+      b1->CreateFixture(&shape, 0.0f);
+    }
+
+    {
+      b2EdgeShape shape;
+      shape.Set(b2Vec2(x - 6.0f,y + 4.0f), b2Vec2(x + 6.0f,y + 4.0f));
+  
+      b2BodyDef bd;
+      b1 = m_world->CreateBody(&bd);
+      b1->CreateFixture(&shape, 0.0f);
+    }
+
+    {
+      b2EdgeShape shape;
+      shape.Set(b2Vec2(x + 6.0f,y + 25.0f), b2Vec2(x + 6.0f,y + 4.0f));
+  
+      b2BodyDef bd;
+      b1 = m_world->CreateBody(&bd);
+      b1->CreateFixture(&shape, 0.0f);
+    }
+
+    {
+      b2EdgeShape shape;
+      shape.Set(b2Vec2(x + 10.0f,y + 25.0f), b2Vec2(x + 10.0f,y));
+  
+      b2BodyDef bd;
+      b1 = m_world->CreateBody(&bd);
+      b1->CreateFixture(&shape, 0.0f);
+    }
+    for(int j = 0; j < 15; j++){
+      for(int i = 0; i < 25; i++)
+      {
+        b2Body* spherebody;
+    
+        b2CircleShape circle;
+        circle.m_radius = 0.25;
+    
+        b2FixtureDef ballfd;
+        ballfd.shape = &circle;
+        ballfd.density = 0.0f;
+        ballfd.friction = 0.0f;
+        ballfd.restitution = 0.0f;
+    
+        b2BodyDef ballbd;
+        ballbd.type = b2_dynamicBody;
+        ballbd.position.Set(x - 9.75f + 0.25*j, y + 0.5 * i);
+        spherebody = m_world->CreateBody(&ballbd);
+        spherebody->CreateFixture(&ballfd);
+     
+      }
+    }
+
+    for(int j = 0; j < 15; j++){
+      for(int i = 0; i < 25; i++)
+      {
+        b2Body* spherebody;
+    
+        b2CircleShape circle;
+        circle.m_radius = 0.25;
+    
+        b2FixtureDef ballfd;
+        ballfd.shape = &circle;
+        ballfd.density = 0.0f;
+        ballfd.friction = 0.0f;
+        ballfd.restitution = 0.0f;
+    
+        b2BodyDef ballbd;
+        ballbd.type = b2_dynamicBody;
+        ballbd.position.Set(x + 6.25f + 0.25*j, y + 0.5 * i);
+        spherebody = m_world->CreateBody(&ballbd);
+        spherebody->CreateFixture(&ballfd);
+     
+      }
+    }
+
+    {
+      b2PolygonShape shape;
+      shape.SetAsBox(2.00f, 0.25f);
+       b2FixtureDef fd;
+      fd.shape = &shape;
+      fd.density = 1.0f;
+      fd.friction = 0.2f;
+  
+  
+      b2BodyDef bd;
+      bd.type = b2_dynamicBody;
+      bd.position.Set(x - 8.0f, y + 15.0f);
+      b2Body* ground = m_world->CreateBody(&bd);
+      ground->CreateFixture(&shape, 0.0f);
+      ground->CreateFixture(&fd);
+    }
+
+
+    
+
+    {
+      b2PolygonShape shape;
+      shape.SetAsBox(1.90f, 0.25f);
+       b2FixtureDef fd;
+      fd.shape = &shape;
+      fd.density = 1.0f;
+      fd.friction = 0.2f;
+  
+  
+      b2BodyDef bd;
+      bd.type = b2_dynamicBody;
+      bd.position.Set(x + 8.0f, y + 15.0f);
+      b2Body* ground = m_world->CreateBody(&bd);
+      ground->CreateFixture(&shape, 0.0f);
+      ground->CreateFixture(&fd);
+    }
   }
+
+    
+
+  
 
   sim_t *sim = new sim_t("Dominos", dominos_t::create);
 }
