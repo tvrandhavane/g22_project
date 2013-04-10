@@ -42,10 +42,136 @@ namespace cs296
 {
   dominos_t::dominos_t()
   {
-    
+    float x = 30.0f;
+    float y = 45.5f;
+    //Axle
+    b2Body* axle;
+    {
+      b2BodyDef *bd = new b2BodyDef;
+      bd->type = b2_dynamicBody;
+      bd->position.Set(x,y);
+
+      
+      b2FixtureDef *ballfd = new b2FixtureDef;
+      ballfd->density = 1.0;
+      ballfd->friction = 0.5;
+      ballfd->restitution = 0.f;
+      ballfd->shape = new b2CircleShape;
+      b2CircleShape circle;
+      circle.m_radius = 5.0;
+      ballfd->shape = &circle;
+  
+
+  //
+
+      b2FixtureDef *fd1 = new b2FixtureDef;
+      fd1->density = 1.0;
+      fd1->friction = 0.5;
+      fd1->restitution = 0.f;
+      fd1->shape = new b2PolygonShape;
+      b2PolygonShape bs1;
+      bs1.SetAsBox(5.0f, 0.5f, b2Vec2(-5.0f,5.0f),0);
+      fd1->shape = &bs1;
+  
+      //
+      b2FixtureDef *fd2 = new b2FixtureDef;
+      fd2->density = 1.0;
+      fd2->friction = 0.5;
+      fd2->restitution = 0.f;
+      fd2->shape = new b2PolygonShape;
+      b2PolygonShape bs2;
+      bs2.SetAsBox(5.0f, 0.5f, b2Vec2(5.0f,-5.0f),0);
+      fd2->shape = &bs2;
+      //
+
+      
+      
+      axle = m_world->CreateBody(bd);
+      axle->CreateFixture(ballfd);
+      axle->CreateFixture(fd1);
+      axle->CreateFixture(fd2);
+
+      b2Body* hinge;
+      {
+        b2PolygonShape shape;
+        shape.SetAsBox(0.25f, 0.25f);
+      
+        b2BodyDef bd;
+        bd.position.Set(x, y);
+        hinge = m_world->CreateBody(&bd);
+        hinge->CreateFixture(&shape, 10.0f);
+      }
+
+      b2RevoluteJointDef jd;
+      b2Vec2 anchor;
+      anchor.Set(x,y);
+      jd.Initialize(hinge, axle, anchor);
+      m_world->CreateJoint(&jd);
+
+    }
+///////////////
     //Starter
-    float x = -40.0f;
-    float y = 52.5f;
+    x = 20.0f;
+    y = 60.5f;
+    b2Body* starter;
+    {
+      b2BodyDef* bd = new b2BodyDef;
+      bd->type = b2_dynamicBody;
+      bd->position.Set(x,y);
+      bd->fixedRotation = false;
+      
+      b2FixtureDef *fd1 = new b2FixtureDef;
+      fd1->density = 1.0;
+      fd1->friction = 0.5;
+      fd1->restitution = 0.0f;
+      fd1->shape = new b2PolygonShape;
+      b2PolygonShape bs1;
+      bs1.SetAsBox(5,0.5, b2Vec2(4.75f, 0.0f ), 0);
+      fd1->shape = &bs1;
+
+      b2FixtureDef *fd2 = new b2FixtureDef;
+      fd2->density = 1.0;
+      fd2->friction = 0.5;
+      fd2->restitution = 0.0f;
+      fd2->shape = new b2PolygonShape;
+      b2PolygonShape bs2;
+      bs2.SetAsBox(0.5,5.0, b2Vec2(0, -4.75f), 0);
+      fd2->shape = &bs2;
+
+      starter = m_world->CreateBody(bd);
+      starter->CreateFixture(fd1);
+      starter->CreateFixture(fd2);
+
+      b2Body* hinge1;
+      {
+        b2PolygonShape shape;
+        shape.SetAsBox(0.25f, 0.25f);
+      
+        b2BodyDef bd;
+        bd.position.Set(x, y);
+        hinge1 = m_world->CreateBody(&bd);
+        hinge1->CreateFixture(&shape, 10.0f);
+      }
+
+      b2RevoluteJointDef jd;
+      jd.Initialize(hinge1, starter, b2Vec2(x,y));
+      m_world->CreateJoint(&jd);
+    }
+
+    b2RevoluteJointDef joint;
+    joint.Initialize(axle, starter, b2Vec2(x,y - 9.75));
+    joint.bodyA = starter;
+    joint.bodyB = axle;
+    joint.localAnchorA = b2Vec2(0.0f,-9.75f);
+    joint.localAnchorB = b2Vec2(-10.0f,5.0f);
+    m_world->CreateJoint(&joint);
+
+////////
+    
+
+    //Starter
+    x = -40.0f;
+    y = 52.5f;
     {
       
       b2Body* horBar;
@@ -353,7 +479,7 @@ namespace cs296
       b2FixtureDef *fd1 = new b2FixtureDef;
       fd1->density = 1.0;
       fd1->friction = 0.5;
-      fd1->restitution = 0.f;
+      fd1->restitution = 0.0f;
       fd1->shape = new b2PolygonShape;
       b2PolygonShape bs1;
       bs1.SetAsBox(4,0.2, b2Vec2(0.0f + x,-2.8f + y), 0);
