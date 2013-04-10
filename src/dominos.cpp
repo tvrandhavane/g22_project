@@ -613,7 +613,7 @@ namespace cs296
 
 	//last rotating plank and box
 	
-    //!<B>14. The revolving horizontal platform containing ball</B>
+    //!<B>15. The revolving horizontal platform containing ball</B>
     /*!
     <p>The bar of the pulley hits the revolving platform. To design the revolving platform, 
     first of all we have to define shape of horizontal platform and that thing is done using variable named as "shape".
@@ -677,7 +677,7 @@ namespace cs296
 
 
     //replacement for water
-    //!<B>14. The hydraulic lift</B>
+    //!<B>16. The hydraulic lift</B>
     /*!
     <p>The ball from the revolving platform lands in the left column of the hydraulic lift. Due to this water in the right column rises and the flag is hoisted.
     Here, the hydraulic lift is a box created using multiple edge shapes. Fluid objects are not available in box2d, so water is implemented by using small particles which give an effect similar to water.
