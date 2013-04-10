@@ -1,0 +1,94 @@
+a{
+	text-decoration: none;
+	color: #0088cc;
+	font-family: "Helvetica Neue";
+}
+
+a:hover{
+	text-decoration: underline;
+}
+
+#authors{
+	padding: 0px;
+}
+
+#about{
+	float: center;
+	font-size: 20px;
+	padding: 5px 20px 20px 20px;
+	margin-left: 10%;
+	margin-right: 10%;
+}
+
+#body{
+	text-align: center;
+	background-color: white;
+	padding : 20px;
+}
+
+#copyright{
+	font-family: 'Verdana', cursive;
+	font-style: normal;
+	font-variant: normal;
+	line-height: normal;
+	text-align: center;
+	font-size: 20px;
+	padding-top: 0px;
+}
+
+#dept{
+	color: #73083A;
+	font-family: 'Verdana', cursive;
+	font-style: normal;
+	font-variant: normal;
+	line-height: normal;
+	text-align: center;
+	font-size: 30px;
+	padding: 0px 20px 20px 20px;
+}
+
+#finalDesign{
+	margin-bottom: 20px;
+}
+
+#group{
+	color: #565270;
+	font-family: 'Verdana', cursive;
+	font-style: normal;
+	font-variant: normal;
+	line-height: normal;
+	text-align: center;
+	font-size: 40px;
+	padding: 10px 20px 20px 20px;
+}
+
+html{
+	background-color:#202020;
+}
+
+li{
+	list-style: none;
+}
+
+#name{
+	font-family: 'Verdana', cursive;
+	font-style: normal;
+	font-variant: normal;
+	line-height: normal;
+	color: black;
+	text-align: center;
+	font-size: 45px;
+	padding: 20px 20px 20px 20px;
+}
+
+#proposedDesign{
+	border: 1px solid black;
+	margin-left: 10%;
+	margin-right: 10%;
+	padding-bottom: 0px;
+	margin-bottom: 40px;
+}
+
+#wikidefn{
+	color: #084F19;
+}
