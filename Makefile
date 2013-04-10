@@ -108,5 +108,6 @@ clean:
 
 dist: clean
 	@$(RM) -rf $(EXTERNAL_ROOT)/lib/* $(EXTERNAL_ROOT)/src/Box2D $(EXTERNAL_ROOT)/include/*
+	@tar -zcvf ../cs296_base_code.tar.gz ../cs296_base_code
 
 exe:setup $(BINDIR)/$(TARGET)
