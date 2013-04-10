@@ -5,7 +5,7 @@ SHELL 	= bash
 CC     	= g++
 LD	= ld
 RM 	= rm
-ECHO	= /bin/echo
+ECHO = /bin/echo
 CAT	= cat
 PRINTF	= printf
 SED	= sed
@@ -15,7 +15,7 @@ DOXYGEN = doxygen
 TARGET = cs296_base
 
 # Project Paths
-PROJECT_ROOT=$(HOME)/cs296_base_code
+PROJECT_ROOT=$(HOME)/Videos/g22_project/cs296_base_code
 EXTERNAL_ROOT=$(PROJECT_ROOT)/external
 SRCDIR = $(PROJECT_ROOT)/src
 OBJDIR = $(PROJECT_ROOT)/obj
@@ -57,7 +57,7 @@ INCS := $(wildcard $(SRCDIR)/*.hpp)
 OBJS := $(SRCS:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
 
-.PHONY: all setup doc clean distclean
+.PHONY: all setup doc clean dist exe
 
 all: setup $(BINDIR)/$(TARGET)
 
@@ -65,6 +65,11 @@ setup:
 	@$(ECHO) "Setting up compilation..."
 	@mkdir -p obj
 	@mkdir -p bin
+	@$(ECHO) "Installing Box2D..."
+	@$(RM) -rf $(EXTERNAL_ROOT)/src/Box2D $(EXTERNAL_ROOT)/lib/* $(EXTERNAL_ROOT)/include/*
+	@tar zxf $(EXTERNAL_ROOT)/src/Box2D.tgz -C $(EXTERNAL_ROOT)/src
+	@mkdir -p $(EXTERNAL_ROOT)/src/Box2D/build296
+	@cd $(EXTERNAL_ROOT)/src/Box2D/build296; cmake ../; make; make install;
 
 $(BINDIR)/$(TARGET): $(OBJS)
 	@$(PRINTF) "$(MESG_COLOR)Building executable:$(NO_COLOR) $(FILE_COLOR) %16s$(NO_COLOR)" "$(notdir $@)"
@@ -98,8 +103,10 @@ doc:
 
 clean:
 	@$(ECHO) -n "Cleaning up..."
-	@$(RM) -rf $(OBJDIR) *~ $(DEPS) $(SRCDIR)/*~
+	@$(RM) -rf $(OBJDIR) $(BINDIR) $(DOCDIR)/html *~ $(DEPS) $(SRCDIR)/*~
 	@$(ECHO) "Done"
 
-distclean: clean
-	@$(RM) -rf $(BINDIR) $(DOCDIR)/html
+dist: clean
+	@$(RM) -rf $(EXTERNAL_ROOT)/lib/* $(EXTERNAL_ROOT)/src/Box2D $(EXTERNAL_ROOT)/include/*
+
+exe:setup $(BINDIR)/$(TARGET)
