@@ -46,8 +46,8 @@
 \end{figure}
 \newpage
 
-\indent \indent Our original design of Rube-Goldberg design is shown in following figure. It works as follows. \\
-\indent There is an L-shaped object hinged at the middle whose one end is connected to the bar. The other end of the bar is connected to the top of the axle. Similarly One other bar is connected at the bottom of the axle as shown in figure 1 \ref{fig:trigger}\\
+\indent Our original design of Rube-Goldberg design is shown in following figure. It works as follows. \\
+\indent There is an L-shaped object hinged at the middle whose one end is connected to the bar. The other end of the bar is connected to the top of the axle. Similarly One other bar is connected at the bottom of the axle as shown in figure 3 \ref{fig:trigger}\\
 
 \begin{figure}[h]
     \centering
@@ -56,9 +56,9 @@
     \caption{Axle}
 \end{figure}
 
-\indent Initially the L-shaped object is positioned as shown in the figure 1, one of it's bar is in horizontal position and other in vertical. Hence it will start oscillating causing axle to oscillate in anti-clockwise direction first and then in clockwise direction. Thus bar connected at the bottom of the axle will move backward and then forward. Its forward motion will topple dominoes. \\
+\indent Initially the L-shaped object is positioned as shown in the figure 3, one of it's bar is in horizontal position and other in vertical. Hence it will start oscillating causing axle to oscillate in anti-clockwise direction first and then in clockwise direction. Thus bar connected at the bottom of the axle will move backward and then forward. Its forward motion will topple dominoes. \\
 
-\indent There is another structure at the bottom of the last domino, as shown in the figure 2 \ref{fig:image1}.  It is a box hinged at it's center of mass. One of it's corner (right-up) is tied with a string which is connected to the wall. One another sharp edged pentagon is kept on it as shown in the figure. The pentagonal object provides anticlockwise torque (due to it's weight) and the string provides the clockwise torque to the box about it's center of mass, hence initially it is in equilibrium. 
+\indent There is another structure at the bottom of the last domino, as shown in the figure 4 \ref{fig:image1}.  It is a box hinged at it's center of mass. One of it's corner (right-up) is tied with a string which is connected to the wall. One another sharp edged pentagon is kept on it as shown in the figure. The pentagonal object provides anticlockwise torque (due to it's weight) and the string provides the clockwise torque to the box about it's center of mass, hence initially it is in equilibrium. 
 \begin{figure}[h]
     \centering
     \label{fig:image1}
@@ -79,7 +79,7 @@
 
 
 \indent After that it will move on the curved surface and fall into the container connected at one side of pulley.  
-\indent Thus the horizontal bar, connected at the other side of pulley moves up and disturbs the equilibrium of hinged plank + box system as shown in figure 4. Thus box on this hinged plank will fall on the one of the end of the hydraulic lift. Thus according to principle of hydraulic lift, it's other side is pushed up. Finally the flag, symbol of success, is kept on the other end of hydraulic lift, is lifted up showing success. Refer figure 4 \ref{fig:image3}
+\indent Thus the horizontal bar, connected at the other side of pulley moves up and disturbs the equilibrium of hinged plank + box system as shown in figure 6. Thus box on this hinged plank will fall on the one of the end of the hydraulic lift. Thus according to principle of hydraulic lift, it's other side is pushed up. Finally the flag, symbol of success, is kept on the other end of hydraulic lift, is lifted up showing success. Refer figure 6 \ref{fig:image3}
 \begin{figure}[h]
     \centering
     \label{fig:image3}
@@ -94,7 +94,7 @@
 {
 \indent \indent The final design is very much similar to the original design. Followings are the changes done in original design. \\
 
-1) Initial (L-shaped object, axle and bars connected at it's top and bottom) system (Figure 1 \ref{fig:trigger}) is replaced by the L-shaped object only. The L-shaped object is hinged at it's middle as shown in the figure. It will start oscillating, and it's motion will topple the dominoes. Refer figure \ref{fig:image4} \\
+1) Initial (L-shaped object, axle and bars connected at it's top and bottom) system (Figure 3 \ref{fig:trigger}) is replaced by the L-shaped object only. The L-shaped object is hinged at it's middle as shown in the figure. It will start oscillating, and it's motion will topple the dominoes. Refer figure 7\ref{fig:image4} \\
  In our original Implementation, we used axle to which two horizontal bars were connected at the bottom and at the top. Now there are two possibilities, either both of the bars are connected rigidly to axle or both are connected smoothly (axle and bar can freely rotate around the joint). \\
 \indent If both of them were connected rigidly, then during oscillatory motion of L-shaped object, the upper bar will apply force in left direction on axle, but as axle is hinged at its center it cant move and thus axle will not rotate. \\
 \indent If both of them were connected smoothly, then horizontal bar at the bottom of axle will rotate initially and try to become vertical. Thus it can't hit dominoes. Hence the replacement was done.
@@ -106,7 +106,7 @@
     \caption{L-shaped object for triggering}
 \end{figure}
 
-2) In original design, the equilibrium of the box (shown in figure 2 \ref{fig:image1}) is disturbed by cutting the string. As string cutting is not possible in Box2d we did some changes. One bar is kept on this box at center. We made last domino to hit the ball kept in front of it. This ball will fall on the left side of this box and disturb it's equilibrium causing bar kept on it to perform projectile motion. 
+2) In original design, the equilibrium of the box (shown in figure 4 \ref{fig:image1}) is disturbed by cutting the string. As string cutting is not possible in Box2d we did some changes. One bar is kept on this box at center. We made last domino to hit the ball kept in front of it. This ball will fall on the left side of this box and disturb it's equilibrium causing bar kept on it to perform projectile motion. 
 
 \begin{figure}[ht!]
 \centering
@@ -124,7 +124,7 @@
 \end{subfigure}
 \end{figure}
 
-3) In our original design, the pendulum was tied to the string (shown in figure 2 \ref{fig:image1}), and when string was cut it performed oscillations. As string cutting is not possible in box2D, we placed pendulum bob on the vertical support, and made it oscillate when this vertical support is disturbed (as shown in figure below). Here we disturbed it's vertical support by colliding it with the bar performing projectile motion as mentioned in 2nd point.\\
+3) In our original design, the pendulum was tied to the string (shown in figure 4 \ref{fig:image1}), and when string was cut it performed oscillations. As string cutting is not possible in box2D, we placed pendulum bob on the vertical support, and made it oscillate when this vertical support is disturbed (as shown in figure below). Here we disturbed it's vertical support by colliding it with the bar performing projectile motion as mentioned in 2nd point.\\
 
 \begin{figure}[h]
 \centering
