@@ -34,14 +34,14 @@
 \textbf{Initial Vs. Final Design}
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=0.45]{rube-goldberg}
+    \includegraphics[scale=0.45]{images/rube-goldberg}
     \caption{Original Rubegoldberg Machine}
 \end{figure}
   
 \newpage
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=0.6]{final_rg}
+    \includegraphics[scale=0.6]{images/final_rg}
     \caption{Final Rubegoldberg Machine}
 \end{figure}
 \newpage
@@ -52,7 +52,7 @@
 \begin{figure}[h]
     \centering
     \label{fig:trigger}
-    \includegraphics[scale=0.6]{trigger}
+    \includegraphics[scale=0.6]{images/trigger}
     \caption{Axle}
 \end{figure}
 
@@ -62,7 +62,7 @@
 \begin{figure}[h]
     \centering
     \label{fig:image1}
-    \includegraphics[scale=0.6]{image1}
+    \includegraphics[scale=0.6]{images/image1}
     \caption{Structure below dominoes}
 \end{figure}
 
@@ -73,7 +73,7 @@
 \begin{figure}[h]
     \centering
     \label{fig:image2}
-    \includegraphics[scale=0.4]{image2}
+    \includegraphics[scale=0.4]{images/image2}
     \caption{Ball climbing the fixed wedge}
 \end{figure}
 
@@ -83,7 +83,7 @@
 \begin{figure}[h]
     \centering
     \label{fig:image3}
-    \includegraphics[scale=0.3]{image3}
+    \includegraphics[scale=0.3]{images/image3}
     \caption{Motion of ball after it falls from the wedge}
 \end{figure}
 
@@ -102,7 +102,7 @@
 \begin{figure}[h]
     \centering
     \label{fig:image4}
-    \includegraphics[scale=0.3]{image4}
+    \includegraphics[scale=0.3]{images/image4}
     \caption{L-shaped object for triggering}
 \end{figure}
 
@@ -112,13 +112,13 @@
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.4\linewidth]{image5}
+  \includegraphics[width=.4\linewidth]{images/image5}
   \caption{At equilibrium}
   \label{fig:image5}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.4\linewidth]{image6}
+  \includegraphics[width=.4\linewidth]{images/image6}
   \caption{equilibrium disturbed}
   \label{fig:image6}
 \end{subfigure}
@@ -130,13 +130,13 @@
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.4\linewidth]{image7}
+  \includegraphics[width=.4\linewidth]{images/image7}
   \caption{At equilibrium}
   \label{fig:image7}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.4\linewidth]{image8}
+  \includegraphics[width=.4\linewidth]{images/image8}
   \caption{equilibrium disturbed}
   \label{fig:image8}
 \end{subfigure}
@@ -148,7 +148,7 @@
 \begin{figure}[h]
     \centering
     \label{fig:image9}
-    \includegraphics[scale=0.3]{image9}
+    \includegraphics[scale=0.3]{images/image9}
     \caption{Hydraulic Lift}
 \end{figure}
 
@@ -160,7 +160,7 @@
 \indent \indent The most interesting part of our Rube-Goldberg machine is hydraulic lift. As we can only implement rigid bodies in Box2D, implementing water was a challenging task. We implemented it using large number of small balls. 
 The flow of water when it tries to attain equillibrium is really awesome!\\
 
-\includegraphics[scale = 0.4]{image10} \hspace{0.5in} \includegraphics[scale = 0.4]{image11} \hspace{0.5in} \includegraphics[scale = 0.4]{image12}
+\includegraphics[scale = 0.4]{images/image10} \hspace{0.5in} \includegraphics[scale = 0.4]{images/image11} \hspace{0.5in} \includegraphics[scale = 0.4]{images/image12}
 \\ \\
 \indent And at the end, a flag is hoisted. We took this idea from the mario game. Whenever mario completes any level, a flag gets hoisted. It is a symbol of victory for him, as he successfully overcomes all the obstacles in his path and reaches destination. Thus flag in our rube-goldberg machine is a symbol of success
 }
@@ -199,13 +199,13 @@ For example, in line 321,\\
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=17cm]{release}
+    \includegraphics[width=17cm]{images/release}
     \caption{Call Graph for the release part}
 \end{figure}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=17cm]{debug}
+    \includegraphics[width=17cm]{images/debug}
     \caption{Call Graph for the debug part}
 \end{figure}
 
@@ -214,7 +214,7 @@ For example, in line 321,\\
 
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=0.4]{debug_part}
+    \includegraphics[scale=0.4]{images/debug_part}
     \caption{Part of Call Graph showing calls to children function}
 \end{figure}
 
@@ -229,29 +229,37 @@ For example, in line 321,\\
 \subsection{Loop time averaged over all reruns for various iteration values}
 {
 \indent \indent \textbf{Observation}$:$ Loop time averaged over all reruns (the points with the blue dots) increases linearly.\\
-\indent \textbf{Explanation}$:$ The step() function of Box2D world detects that if an event is occurred or not, if yes, then corresponding callback is given. An increase in the iteration value means addition of time taken for an extra step function with a callback causing a significant increase in the loop time. Hence, we can see the significant increasing trend of loop times.
+\indent \textbf{Explanation}$:$ The step() function of Box2D world detects that if an event is occurred or not, if yes, then corresponding callback is given. An increase in the iteration value means addition of time taken for an extra
+ step function with a callback causing a significant increase in the loop time. Hence, we can see the significant
+ increasing trend of loop times.
  
  \begin{figure}[h]
     \centering
-    \includegraphics[scale = 0.5]{plot1}
+    \includegraphics[scale = 0.5]{images/plot1}
 \end{figure}
 }
 
 
 \subsection{Errors in the step time averaged over all reruns for various iteration values.}
 {
-\indent \indent \textbf{Observation}$:$ The length of y-error bars for lower iteration values is more as compared to the length of y-error bars for higher iteration values.\\
+\indent \indent \textbf{Observation}$:$ The length of y-error bars for lower iteration values is more as compared to the length of
+ y-error bars for higher iteration values.\\
  
 \begin{figure}[h]
     \centering
-    \includegraphics[scale = 0.5]{plot5}
+    \includegraphics[scale = 0.5]{images/plot5}
 \end{figure}
 
 
 
-\indent \textbf{Explanation}$:$When iteration value is lower, the average step time is calculated for less number of steps which is then averaged over all reruns(100 reruns). Thus, less amount of data is available for averaging the values when iteration value is lower. Due to less data, the averages for lower iteration values are less accurate giving larger errors. Hence, the larger y-error bars for low iteration values.}
+\indent \textbf{Explanation}$:$When iteration value is lower, the average step time is calculated for less number of steps
+ which is then averaged over all reruns(100 reruns). Thus, less amount of data is available for averaging the
+ values when iteration value is lower. Due to less data, the averages for lower iteration values are less accurate
+ giving larger errors. Hence, the larger y-error bars for low iteration values.
+}
 
-\subsection{Values of times before and after adding load}{
+\subsection{Values of times before and after adding load}
+{
 \indent \indent \textbf{Observation}$:$ Values of loop time for all iteration values and rerun values increase significantly when system is heavily loaded.\\
 
 \indent \textbf{Explanation}$:$ If the system is heavily loaded, the function gets less share of CPU resources thus increasing the time of processing.\\
@@ -260,12 +268,12 @@ For example, in line 321,\\
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=1.0\linewidth]{plot1}
+  \includegraphics[width=1.0\linewidth]{images/plot1}
   \caption{Before load}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=1.0\linewidth]{plot2}
+  \includegraphics[width=1.0\linewidth]{images/plot2}
   \caption{After load}
 \end{subfigure}
 \end{figure}
@@ -276,12 +284,12 @@ For example, in line 321,\\
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=1.0\linewidth]{plot3}
+  \includegraphics[width=1.0\linewidth]{images/plot3}
   \caption{Before load}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=1.0\linewidth]{plot4}
+  \includegraphics[width=1.0\linewidth]{images/plot4}
   \caption{After load}
 \end{subfigure}
 \end{figure}

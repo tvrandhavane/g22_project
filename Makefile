@@ -21,6 +21,7 @@ SRCDIR = $(PROJECT_ROOT)/src
 OBJDIR = $(PROJECT_ROOT)/obj
 BINDIR = $(PROJECT_ROOT)/bin
 DOCDIR = $(PROJECT_ROOT)/doc
+SRCPTDIR = $(PROJECT_ROOT)/scripts
 
 # Library Paths
 BOX2D_ROOT=$(EXTERNAL_ROOT)
@@ -57,7 +58,7 @@ INCS := $(wildcard $(SRCDIR)/*.hpp)
 OBJS := $(SRCS:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
 
-.PHONY: all setup doc clean dist exe
+.PHONY: all setup doc clean dist exe report
 
 all: setup $(BINDIR)/$(TARGET)
 
@@ -85,7 +86,7 @@ $(BINDIR)/$(TARGET): $(OBJS)
 -include $(OBJS:.o=.d)
 
 $(OBJS): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
-	@$(PRINTF) "$(MESG_COLOR)Compiling: $(NO_COLOR) $(FILE_COLOR) %25s$(NO_COLOR)" "$(notdir $<)"
+	@$(PRINTF) "$(MESG_COLOR)Compiliimages/ng: $(NO_COLOR) $(FILE_COLOR) %25s$(NO_COLOR)" "$(notdir $<)"
 	@$(CC) $(CPPFLAGS) -c $< -o $@ -MD 2> temp.log || touch temp.err
 	@if test -e temp.err; \
 	then $(PRINTF) $(ERR_FMT) $(ERR_STRING) && $(CAT) temp.log; \
@@ -101,9 +102,16 @@ doc:
 	@$(DOXYGEN) $(DOCDIR)/Doxyfile 2 > /dev/null
 	@$(ECHO) "Done"
 
+report: $(DOCDIR)/Report.tex
+	cd $(DOCDIR)/; latex Report.tex; bibtex Report.aux; latex Report.tex;latex Report.tex;dvipdf Report.dvi Report.pdf;
+	cd $(DOCDIR)/; $(RM) *.aux *.dvi *.log *.out *.toc *.blg *.bbl;
+	@python3 $(SRCPTDIR)/g22_gen_html.py
+
+
 clean:
 	@$(ECHO) -n "Cleaning up..."
 	@$(RM) -rf $(OBJDIR) $(BINDIR) $(DOCDIR)/html *~ $(DEPS) $(SRCDIR)/*~
+	@$(RM) -rf $(DOCDIR)/Report.html
 	@$(ECHO) "Done"
 
 dist: clean

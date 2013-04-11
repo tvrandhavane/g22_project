@@ -214,99 +214,6 @@ while(len(arrayofsubsection2) != 0):
 	
 
 
-'''
-
-#########################################subsection 2#######################################
-
-
-
-
-observationsub1 = re.sub("    {Observation}     ","",observationsub1)
-explanationsub1 = ""
-explanationsub1 = re.sub("   {Explanation} ","",arrayofsubsection[2])
-explanationsub1part1 = arrayofsubsection[19]
-
-word1="}}"
-codesub1 = ""
-i = 4
-
-while(not (word1 in arrayofsubsection[i])):
-	codesub1 += arrayofsubsection[i] + '\n'
-	i=i+1
-	
-codesub1 += '  }'
-codesub1 = re.sub("<","<<arbit>",codesub1)
-#print(codesub1)
-
-##subsection 2
-
-subsection2 = section1["Errors in the step time averaged over all reruns for various iteration values. "]
-subsection2=re.sub("\\\\_","_",subsection2)
-subsection2=re.sub("\\\\&","&",subsection2)
-subsection2=re.sub("\\\\[a-z]*","",subsection2)
-subsection2=re.sub("\$","",subsection2)
-
-observationsub2 = ""
-arrayofsubsection2 = subsection2.split('\n')
-observationsub2 = arrayofsubsection2[1]
-observationsub2 = re.sub("   {Observation}    ","",observationsub2)
-explanationsub2 = arrayofsubsection2[6]
-explanationsub2 = re.sub("   {Explanation}     ","",explanationsub2)
-
-#print(explanationsub2)
-
-subsection3 = ""
-subsection3 = section1["Values of times before and after adding load"]
-
-subsection3=re.sub("\\\\[a-z]*","",subsection3)
-subsection3=re.sub("\$","",subsection3)
-
-arrayofsubsection3 = subsection3.split('\n')
-observationsub3 = arrayofsubsection3[1]
-observationsub3 = re.sub("    {Observation}    ","",observationsub3)
-explanationsub3 = arrayofsubsection3[2]
-explanationsub3 = re.sub("   {Explanation}    ","",explanationsub3)
-
-#print(observationsub1)
-
-#print(explanationsub1)
-
-
-########################################################################################################
-#section2.py
-
-
-section2 = section["Difference between time and gettimeofday"]
-section2=re.sub("\\\\_","_",section2)
-section2=re.sub("\\\\&","&",section2)
-section2=re.sub("\\\\[a-z]*","",section2)
-section2=re.sub("{0.1cm}","",section2)
-section2=re.sub("{blue}{","",section2)
-section2=re.sub("\$","",section2)
-
-data1=section2.split('\n')
-#titleofsection=""
-lengthofdata1 = len(data1)
-
-#titleofsection=re.sub("{","",data1[0])
-#titleofsection=re.sub("}","",titleofsection)
-contentfromsection2 = ""
-contentfromsection2 = data1[1] + '\n' + data1[2]+ '\n' + data1[3]
-contentfromsection2 = re.sub("   ",":",contentfromsection2)
-contentfromsection2 = re.sub("are:","are:<br/>",contentfromsection2)
-contentfromsection2 = re.sub("ms","ms<br/>",contentfromsection2)
-
-codefromsection2 = ""
-i=5
-
-while(i!=len(data1)-1):
-	codefromsection2 = codefromsection2 + data1[i] + '\n'
-	i+=1
-
-codefromsection2 = re.sub("}}","}",codefromsection2)
-codefromsection2 = re.sub("<<","<<<arbit>",codefromsection2)
-'''
-
 htmlCode = "<!DOCTYPE html><html lang='en'><head><title>" + title +"</title></head>"
 htmlCode += "<body align='center'><h1>"+ title + " </h1>"
 htmlCode += "<h4> <ul style= 'list-style-type:none'> <li>" + authorname[0] +" | " + authorollNos[0] + "</li>"
@@ -323,38 +230,13 @@ htmlCode += "<p>" + observationsub3 +"</p>"
 htmlCode += "<p>" + observationsub4 +"</p>"
 htmlCode += "<li><h3>" + subsectionName[1] +"</h3>"
 htmlCode += "<p>" + observationarray[0] + "</p>"
-htmlCode += "<img src='release.png'></img>"
-htmlCode += "<img src='debug.png'></img>"
+htmlCode += "<img src='images/release.png'></img>"
+htmlCode += "<img src='images/debug.png'></img>"
 htmlCode += "<p>" + observationarray[1] + "</p>"
-htmlCode += "<img src='debug_part.png'></img>"
+htmlCode += "<img src='images/debug_part.png'></img>"
 htmlCode += "</li></ol></body></html>"
-'''
-htmlCode += "<pre style='font-style:italic; color:blue;'>"
-htmlCode += codesub1 + "</pre>"
-htmlCode += "<img src='../plots/g22_lab09_plot01.png'></img>"
-htmlCode += "<p>" + explanationsub1part1 +  "</p>"
-htmlCode += "</p></p></li><li><h3>" + subsectionName[1] + "</h3><p>"
-htmlCode += "<span style='font-weight:bold;'> Observation :</span>"
-htmlCode += observationsub2 + "</p><p>"
-htmlCode += "<span style='font-weight:bold;'> Explanation :</span>"
-htmlCode += explanationsub2 + "<p>"
-htmlCode += "<img src='../plots/g22_lab09_plot05.png'></img>"
-htmlCode += "</p></p></li><li><h3>" + subsectionName[2] +"</h3>"
-htmlCode += "<p><span style='font-weight:bold;'> Observation :</span>"
-htmlCode += observationsub3
-htmlCode += "</p><p><span style='font-weight:bold;'> Explanation :</span>"
-htmlCode += explanationsub3
-htmlCode += "<p><img align='center' src='../plots/hardcoded_plot1.png'></img>"
-htmlCode += "<p align='center'> Figure 1: after load </p>"
-htmlCode += "<img align='center' src='../plots/hardcoded_plot2.png'></img>"
-htmlCode += "<p align='center'> Figure 2: before load </p></p></p></li></ol></li>"
-htmlCode += "<li><h2> 2. "+ sectionNames[1]+"</h2>"
-htmlCode += "<p>" + contentfromsection2
-htmlCode += "</p><pre style='font-style:italic; color:blue;'>"
-htmlCode += codefromsection2
-htmlCode += "</pre></li></ol></body></html>"
-'''
-file = open('doc/g22_lab09_report.html', "w")
+
+file = open('doc/Report.html', "w")
 file.write(htmlCode)
 file.close()
 
