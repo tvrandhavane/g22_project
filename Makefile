@@ -149,7 +149,7 @@ install:
 clean:
 	@$(ECHO) -n "Cleaning up..."
 	@$(RM) -rf $(OBJDIR) $(BINDIR) $(DOCDIR)/html plots *~ $(DEPS) $(SRCDIR)/*~
-	@$(RM) -rf $(DOCDIR)/Report.html
+	@$(RM) -rf $(DOCDIR)/Report.html $(DOCDIR)/Report.pdf 
 	@$(ECHO) "Done"
 
 dist: clean
