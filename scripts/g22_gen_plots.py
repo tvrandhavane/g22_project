@@ -2,7 +2,7 @@ import numpy
 import matplotlib.pyplot as plotter
 import math
 
-data = numpy.genfromtxt('data/lab09_g22_data.csv', dtype=None, delimiter=',', 
+data = numpy.genfromtxt('data/g22_data.csv', dtype=None, delimiter=',', 
 						names=['reruns', 'iterations', 'stepTime', 'colTime', 'velTime','posTime','loopTime'])
 
 
@@ -65,7 +65,7 @@ plotter.legend(('Step Time','Loop Time'), loc=2)
 plotter.ylabel('time averaged over all reruns') 
 plotter.xlabel('iteration values')
 plotter.title('Loop time and Step time vs iteration values')
-plotter.savefig('plots/g22_lab09_plot01.png')
+plotter.savefig('plots/g22_plot01.png')
 plotter.clf()
 
 #plot5
@@ -74,7 +74,7 @@ plotter.legend(('Average step time','Error in step time'), loc=2)
 plotter.ylabel('Step time averaged over all reruns') 
 plotter.xlabel('iteration values')
 plotter.title('Step time vs iteration values')
-plotter.savefig('plots/g22_lab09_plot05.png')
+plotter.savefig('plots/g22_plot05.png')
 plotter.clf()
 
 #plot2
@@ -83,7 +83,7 @@ plotter.legend(('Step Time','Collision Time', 'Position Time', 'Velocity Time'),
 plotter.ylabel('time averaged over all reruns') 
 plotter.xlabel('iteration values')
 plotter.title('Step time, Velocity time, Collision time and Position time vs iteration values')
-plotter.savefig('plots/g22_lab09_plot02.png')
+plotter.savefig('plots/g22_plot02.png')
 plotter.clf()
 
 #step time averaged over all iterations (Y) for various rerun values (X)
@@ -127,7 +127,7 @@ plotter.legend(('Step Time','Loop Time'), loc=0)
 plotter.ylabel('time averaged over all iterations') 
 plotter.xlabel('rerun values')
 plotter.title('Loop time and Step time vs rerun values')
-plotter.savefig('plots/g22_lab09_plot03.png')
+plotter.savefig('plots/g22_plot03.png')
 plotter.clf()
 
 #plot4
@@ -136,7 +136,7 @@ plotter.legend(('Step Time','Collision Time', 'Position Time', 'Velocity Time'),
 plotter.ylabel('time averaged over all iterations') 
 plotter.xlabel('rerun values')
 plotter.title('Step time, Velocity time, Collision time and Position time vs rerun values')
-plotter.savefig('plots/g22_lab09_plot04.png')
+plotter.savefig('plots/g22_plot04.png')
 plotter.clf()
 
 #histogram
@@ -149,8 +149,5 @@ n, bins, patches = plotter.hist(stepTimes, 100,histtype = 'step', cumulative=Tru
 plotter.ylabel('Number of reruns') 
 plotter.xlabel('step time')
 plotter.title('Frequency plot of reruns vs step time')
-plotter.savefig('plots/g22_lab09_plot06.png')
+plotter.savefig('plots/g22_plot06.png')
 plotter.clf()
-	
-
-

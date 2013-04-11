@@ -130,6 +130,9 @@ namespace cs296
 
     virtual void keyboard(unsigned char key) { B2_NOT_USED(key); }
     virtual void keyboard_up(unsigned char key) { B2_NOT_USED(key); }
+    
+
+    inline b2World* get_world(void){return m_world;}
 
     void shift_mouse_down(const b2Vec2& p) { B2_NOT_USED(p); }
     virtual void mouse_down(const b2Vec2& p) { B2_NOT_USED(p); }
